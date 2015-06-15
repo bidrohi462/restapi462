@@ -82,12 +82,12 @@ class RestApi {
 
 					case 2: // Forecast
 					$code=$weather->weather[0]->id;
-					$fq=$array[1];
-					if($fq=='Rain') {
+					$fq=strtolower($array[1]);
+					if($fq=='rain') {
 						$answer=$code>=200 && $code<600? 'Yes': 'No';
-					} else if($fq=='Clouds') {
+					} else if($fq=='clouds') {
 						$answer=($code>=200 && $code<600) || ($code>800 && $code<900)? 'Yes': 'No';
-					} else if($fq=='Clear weather') {
+					} else if($fq=='clear weather') {
 						$answer=$code==800? 'Yes': 'No';
 					} else {
 						$answer='No';
