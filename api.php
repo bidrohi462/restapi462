@@ -104,15 +104,56 @@ class RestApi {
 	}
 
 	private function getAnswer() {
-		$array=array(
-			'answer' => 'Your majesty! Jon Snow knows nothing! So do I!'
-		);
+		$array=null;
+
+		$sparql=$this->getSparql();
+		$result=$this->getAnswerDBPedia($sparql);
+		$lang='xml:lang';
+
+		if(empty($result)) {
+			$this->statusHeader(404);
+			$array=array(
+				'answer' => 'Your majesty! Jon Snow knows nothing! So do I!'
+			);
+		} else {
+			foreach($result as $item) {
+				if($item->x1->$lang=='en') {
+					$array=array(
+						'answer' => $item->x1->value
+					);
+					break;
+				}
+			}
+		}
 		echo json_encode($array, $this->p);
 	}
 
 	private function getWeatherFor($city) {
+		$q=http_build_query(array('q' => $city));
+		return $this->curlRequestGet('http://api.openweathermap.org/data/2.5/weather?'.$q);
+	}
+
+	private function getSparql() {
+		$question=http_build_query(array('question' => $this->query));
+		$array=$this->curlRequestGet('http://quepy.machinalis.com/engine/get_query?'.$question);
+		return $array->queries[0]->query;
+	}
+
+	private function getAnswerDBPedia($sparql) {
+		$data=http_build_query(array(
+			'debug' => 'on',
+			'timeout' => '0',
+			'query' => $sparql,
+			'default-graph-uri' => '',
+			'format' => 'application/sparql-results+json'
+		));
+		$array=$this->curlRequestGet('http://dbpedia.org/sparql?'.$data);
+		return $array->results->bindings;
+	}
+
+	private function curlRequestGet($url) {
 		$ch=curl_init();
-		curl_setopt($ch, CURLOPT_URL, 'http://api.openweathermap.org/data/2.5/weather?q='.$city);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		return json_decode(curl_exec($ch));
 	}
