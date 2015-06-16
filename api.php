@@ -10,6 +10,7 @@ class RestApi {
 		}
 
 		// Comment 1: Commit 1 on merge-test
+		// Comment 2: Commit 2 on merge-test
 
 		// call to base url of the api
 		if(!isset($_GET['request']) || empty($_GET['request']) || !isset($_GET['q']) || empty($_GET['q'])) {
