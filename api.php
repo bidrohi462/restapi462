@@ -17,7 +17,7 @@ class RestApi {
 		// too many parameters in path
 		$args=explode('/', $_GET['request']);
 		if(count($args)>1) {
-			$this->errorMessage('Too many parameters in requested path');
+			$this->errorMessage('A little too many parameters in requested path');
 		}
 
 		// initialize parameters
