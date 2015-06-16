@@ -27,6 +27,8 @@ class RestApi {
 
 		$this->statusHeader(200);
 
+		// Comment 3: Commit 1 on master
+		
 		switch($this->endpoint) {
 			case 'greetings':
 			$this->getGreetings();
