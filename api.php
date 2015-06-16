@@ -9,6 +9,8 @@ class RestApi {
 			$this->errorMessage('Only GET request allowed');
 		}
 
+		// Comment 1: Commit 1 on merge-test
+
 		// call to base url of the api
 		if(!isset($_GET['request']) || empty($_GET['request']) || !isset($_GET['q']) || empty($_GET['q'])) {
 			$this->errorMessage('Application: http://restapi462.herokuapp.com/(endpoint)?q=(query)');
